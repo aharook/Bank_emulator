@@ -1,18 +1,19 @@
 #ifndef INTERESTSTRATEGY
 #define INTERESTSTRATEGY
 
+#include "Transaction.h"
 
-class InterestStrategy{
+class Strategy{
 public:
 
 virtual double calculate (double balance) = 0; 
 
-virtual ~InterestStrategy() = default;
+virtual ~Strategy() = default;
 
 };
 
 
-class SavingsInterest: public InterestStrategy {
+class SavingsInterest: public Strategy {
 
 public:
      double calculate(double balance)   override  {
@@ -22,7 +23,7 @@ public:
     }
 };
 
-class FixedDepositInterest: public InterestStrategy {
+class FixedDepositInterest: public Strategy {
 
 public:
      double calculate(double balance) override {
@@ -32,7 +33,7 @@ public:
     }
 };
 
-class PremiumInterest: public InterestStrategy {
+class PremiumInterest: public Strategy {
 
 public:
     double calculate(double balance) override {
@@ -40,5 +41,10 @@ public:
 
         return 500.0 + (balance * 0.05); 
     }
+};
+
+class StrategyFactory {
+public:
+    static Strategy* createStrategy(TransactionType type);
 };
 #endif

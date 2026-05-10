@@ -1,6 +1,7 @@
 ``` mermaid
 classDiagram
 
+    
     class Observer {
         <<interface>>
         +update(String message)
