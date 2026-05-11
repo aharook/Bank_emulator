@@ -81,6 +81,15 @@ classDiagram
         +DateTime timestamp
         +TransactionType type
     }
+    class AccountSaver{
+        +filePath_
+        +cache
+        +save(account)
+        +getAll() const
+        +findByNumber()
+        +saveToFile()
+        +loadFromFile()
+    }
     
     Client "1" *-- "many" Account 
     Account "1" *-- "many" Transaction 
@@ -89,4 +98,5 @@ classDiagram
     Transaction --> TransactionType 
     DepositCommand --> Account
     WithdrawCommand --> Account 
+    AccountSaver --> Account
 ```
