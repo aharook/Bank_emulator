@@ -21,6 +21,9 @@ const std::vector<Account>& AccountSaver::getAll() const {
 }
 
 Account AccountSaver::findByNumber(const std::string& accountNumber) {
+    if (accountNumber.empty()) {
+        throw std::invalid_argument("Account number cannot be empty!");
+    }
     auto it = std::find_if(cache.begin(), cache.end(),
         [&accountNumber](const Account& acc) {
             return acc.getAccountNumber() == accountNumber;
@@ -34,6 +37,9 @@ Account AccountSaver::findByNumber(const std::string& accountNumber) {
 }
 
 const Account AccountSaver::findByNumber(const std::string& accountNumber) const {
+    if (accountNumber.empty()) {
+        throw std::invalid_argument("Account number cannot be empty!");
+    }
     auto it = std::find_if(cache.begin(), cache.end(),
         [&accountNumber](const Account& acc) {
             return acc.getAccountNumber() == accountNumber;
@@ -57,7 +63,7 @@ void AccountSaver::loadFromFile() {
     while (std::getline(file, line)) {
         if (line.empty()) continue;
         
-        size_t commaPos = line.find('|');
+        size_t commaPos = line.find(',');
         if (commaPos == std::string::npos) continue;
         
         std::string accountNumber = line.substr(0, commaPos);
@@ -79,7 +85,7 @@ void AccountSaver::saveToFile() {
     }
     
     for (const Account& acc : cache) {
-        file << acc.getAccountNumber() << "|" << acc.getBalance() << std::endl;
+        file << acc.getAccountNumber() << "," << acc.getBalance() << std::endl;
     }
     
     file.close();

@@ -4,7 +4,8 @@
 #include <stack>
 #include <memory>
 #include <iostream>
-#include "ICommand.h"
+#include <stdexcept>
+#include "../core/ICommand.h"
 
 class TransactionManager {
 private:
@@ -12,6 +13,9 @@ private:
 
 public:
     void executeCommand(std::shared_ptr<ICommand> command) {
+        if (!command) {
+            throw std::invalid_argument("Command cannot be null!");
+        }
         if (command->Execute()) {
             commandHistory.push(command);
         } else {

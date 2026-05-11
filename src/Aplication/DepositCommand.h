@@ -3,6 +3,7 @@
 
 #include "ICommand.h"
 #include "Account.h"
+#include <stdexcept>
 
 class DepositCommand: public ICommand {
 
@@ -12,7 +13,12 @@ class DepositCommand: public ICommand {
 
 public:
 
-    DepositCommand(Account& account, double amount,bool isExecuted) : account(account), amount(amount), isExecuted(false) {}
+    DepositCommand(Account& account, double amount, bool isExecuted) 
+        : account(account), amount(amount), isExecuted(false) {
+        if (amount <= 0) {
+            throw std::invalid_argument("Deposit amount must be positive!");
+        }
+    }
 
     bool Execute() override {
         isExecuted = account.deposit(amount);

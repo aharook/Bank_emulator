@@ -1,0 +1,27 @@
+#ifndef ACCOUNTMANAGER_H
+#define ACCOUNTMANAGER_H
+
+#include "../core/Account.h"
+#include "../Infrastructure/AccountSaver.h"
+#include <map>
+#include <memory>
+
+class AccountManager {
+private:
+    std::map<std::string, std::shared_ptr<Account>> accounts;
+    AccountSaver saver;
+
+public:
+    AccountManager(const std::string& filePath);
+    ~AccountManager();
+
+    void createAccount(const std::string& number, double balance);
+    void deleteAccount(const std::string& number);
+    std::shared_ptr<Account> getAccount(const std::string& number);
+    bool accountExists(const std::string& number) const;
+    
+    void loadAll();
+    void saveAll();
+};
+
+#endif
