@@ -81,12 +81,61 @@ classDiagram
         +DateTime timestamp
         +TransactionType type
     }
+
+    class AccountManager {
+        -Map accounts
+        -AccountSaver saver
+        +createAccount(String number, double balance)
+        +deleteAccount(String number)
+        +getAccount(String number) Account
+        +accountExists(String number) bool
+        +getAllAccounts() Map
+        +loadAll()
+        +saveAll()
+    }
+
+    class ClientManager {
+        -Map clients
+        -ClientSaver saver
+        +createClient(String name)
+        +deleteClient(String taxId)
+        +getClient(String taxId) Client
+        +clientExists(String taxId) bool
+        +getAllClients() Map
+        +loadAll()
+        +saveAll()
+    }
+
+    class BankService {
+        -AccountManager accountManager
+        -ClientManager clientManager
+        -TransactionManager transactionManager
+        +getAccountManager() AccountManager
+        +getClientManager() ClientManager
+        +getTransactionManager() TransactionManager
+    }
+
+    class TransactionManager {
+        -Stack commandHistory
+        +executeCommand(Command command)
+        +undoLast()
+    }
+
     class AccountSaver{
         +filePath_
         +cache
         +save(account)
         +getAll() const
         +findByNumber()
+        +saveToFile()
+        +loadFromFile()
+    }
+
+    class ClientSaver{
+        +filePath_
+        +cache
+        +save(client)
+        +getAll() const
         +saveToFile()
         +loadFromFile()
     }
@@ -98,5 +147,14 @@ classDiagram
     Transaction --> TransactionType 
     DepositCommand --> Account
     WithdrawCommand --> Account 
+    TransactionManager --> Command
     AccountSaver --> Account
+    ClientSaver --> Client
+    AccountManager --> AccountSaver
+    AccountManager --> Account
+    ClientManager --> ClientSaver
+    ClientManager --> Client
+    BankService o-- AccountManager
+    BankService o-- ClientManager
+    BankService o-- TransactionManager
 ```
