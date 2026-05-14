@@ -3,8 +3,13 @@
 #include "AccountUI.h"
 #include "TransactionUI.h"
 #include "../Aplication/BankService.h"
+#include "../Aplication/AccountManager.h"
 
-MainMenu::MainMenu(BankService* service) : bankService(service) {}
+MainMenu::MainMenu(BankService* service) : bankService(service) {
+    notificationService = std::make_unique<NotificationService>("BankAlert");
+
+    bankService->getAccountManager()->attachGlobalObserver(notificationService.get());
+}
 
 void MainMenu::run() {
     bool inMenu = true;

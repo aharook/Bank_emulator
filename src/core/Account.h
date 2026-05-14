@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "Transaction.h"
 #include "Observer.h"
-#include "NotificationService.h"
+#include "TransactionEvent.h"
 #include "InterestStrategy.h"
 
 class Account {
@@ -36,7 +36,9 @@ public:
             balance += interest;
             Transaction trans("", interest, TransactionType::INTEREST_PAYMENT, std::chrono::system_clock::now());
             history.push_back(trans);
-            notify("Interest applied: +" + std::to_string(interest));
+            
+            TransactionEvent event(TransactionType::INTEREST_PAYMENT, interest, balance);
+            notifyObservers(event);
         }
     }
 
@@ -46,10 +48,10 @@ public:
         }
     }
 
-    void notify(std::string message) {
+    void notifyObservers(const TransactionEvent& event) {
         for (IObserver* observer : observers) {
             if (observer != nullptr) {
-                observer->update(message);
+                observer->update(event);
             }
         }
     }
@@ -59,7 +61,9 @@ public:
         balance += amount;
         Transaction trans("", amount, TransactionType::DEPOSIT, std::chrono::system_clock::now());
         history.push_back(trans);
-        notify("Deposit: +" + std::to_string(amount) + " New balance: " + std::to_string(balance));
+        
+        TransactionEvent event(TransactionType::DEPOSIT, amount, balance);
+        notifyObservers(event);
         return true;
     }
 
@@ -68,7 +72,9 @@ public:
         balance -= amount;
         Transaction trans("", amount, TransactionType::WITHDRAWAL, std::chrono::system_clock::now());
         history.push_back(trans);
-        notify("Withdrawal: -" + std::to_string(amount) + " New balance: " + std::to_string(balance));
+        
+        TransactionEvent event(TransactionType::WITHDRAWAL, amount, balance);
+        notifyObservers(event);
         return true;
     }
 
@@ -77,7 +83,10 @@ public:
         recipient.deposit(amount);
         Transaction trans("", amount, TransactionType::TRANSFER, std::chrono::system_clock::now());
         history.push_back(trans);
-        notify("Transfer: -" + std::to_string(amount) + " to account " + recipient.getAccountNumber());
+        
+        TransactionEvent event(TransactionType::TRANSFER, amount, balance, 
+                             "to account " + recipient.getAccountNumber());
+        notifyObservers(event);
         return true;
     }
 
@@ -86,7 +95,9 @@ public:
             balance -= fee;
             Transaction trans("", fee, TransactionType::FEE_DEDUCTION, std::chrono::system_clock::now());
             history.push_back(trans);
-            notify("Fee deducted: -" + std::to_string(fee));
+            
+            TransactionEvent event(TransactionType::FEE_DEDUCTION, fee, balance);
+            notifyObservers(event);
         }
     }
 };

@@ -19,7 +19,11 @@ void AccountManager::createAccount(const std::string& number, double balance) {
     }
 
     if (accounts.find(number) == accounts.end()) {
-        accounts[number] = std::make_shared<Account>(number, balance);
+        auto account = std::make_shared<Account>(number, balance);
+        if (globalObserver != nullptr) {
+            account->attach(globalObserver);
+        }
+        accounts[number] = account;
     }
 
 }
@@ -62,4 +66,11 @@ void AccountManager::saveAll() {
         saver.save(*pair.second);
     }
     saver.saveToFile();
+}
+
+void AccountManager::attachGlobalObserver(IObserver* observer) {
+    globalObserver = observer;
+    for (auto& pair : accounts) {
+        pair.second->attach(observer);
+    }
 }

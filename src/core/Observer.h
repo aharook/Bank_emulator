@@ -1,13 +1,13 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 
-#include <string>
+#include "TransactionEvent.h"
 
 class IObserver {
 public:
     virtual ~IObserver() = default;
 
-    virtual void update(std::string Message) = 0;
+    virtual void update(const TransactionEvent& event) = 0;
 };
 
 #endif

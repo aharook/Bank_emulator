@@ -10,11 +10,15 @@
 class TestObserver : public IObserver {
 public:
     int updateCount = 0;
-    std::string lastMessage;
+    TransactionType lastEventType;
+    double lastAmount = 0.0;
+    double lastBalance = 0.0;
     
-    void update(std::string message) override {
+    void update(const TransactionEvent& event) override {
         updateCount++;
-        lastMessage = message;
+        lastEventType = event.type;
+        lastAmount = event.amount;
+        lastBalance = event.newBalance;
     }
 };
 
@@ -47,7 +51,8 @@ TEST_F(MockTests, DepositNotifiesObserver) {
     acc.deposit(50.0);
     
     EXPECT_EQ(observer.updateCount, 1);
-    EXPECT_TRUE(observer.lastMessage.find("Deposit") != std::string::npos);
+    EXPECT_EQ(observer.lastEventType, TransactionType::DEPOSIT);
+    EXPECT_DOUBLE_EQ(observer.lastAmount, 50.0);
 }
 
 TEST_F(MockTests, WithdrawalNotifiesObserver) {
@@ -58,7 +63,8 @@ TEST_F(MockTests, WithdrawalNotifiesObserver) {
     acc.withdraw(30.0);
     
     EXPECT_EQ(observer.updateCount, 1);
-    EXPECT_TRUE(observer.lastMessage.find("Withdrawal") != std::string::npos);
+    EXPECT_EQ(observer.lastEventType, TransactionType::WITHDRAWAL);
+    EXPECT_DOUBLE_EQ(observer.lastAmount, 30.0);
 }
 
 TEST_F(MockTests, MultipleObserversNotified) {
@@ -130,7 +136,7 @@ TEST_F(MockTests, FeeDeductionNotifiesObserver) {
     acc.deductFee(50.0);
     
     EXPECT_EQ(observer.updateCount, 1);
-    EXPECT_TRUE(observer.lastMessage.find("Fee") != std::string::npos);
+    EXPECT_EQ(observer.lastEventType, TransactionType::FEE_DEDUCTION);
 }
 TEST_F(MockTests, ClientNameUpdate) {
     clientManager->createClient("Original");
