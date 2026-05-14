@@ -19,6 +19,7 @@ public:
     void deleteClient(const std::string& taxId);
     std::shared_ptr<Client> getClient(const std::string& taxId);
     bool clientExists(const std::string& taxId) const;
+    std::map<std::string, std::shared_ptr<Client>> getAllClients() const;
     
     void loadAll();
     void saveAll();

@@ -39,6 +39,10 @@ bool ClientManager::clientExists(const std::string& taxId) const {
     return clients.find(taxId) != clients.end();
 }
 
+std::map<std::string, std::shared_ptr<Client>> ClientManager::getAllClients() const {
+    return clients;
+}
+
 void ClientManager::loadAll() {
     const auto& allClients = saver.getAll();
     for (const auto& client : allClients) {
@@ -50,4 +54,5 @@ void ClientManager::saveAll() {
     for (const auto& pair : clients) {
         saver.save(pair.second);
     }
+    saver.saveToFile();
 }

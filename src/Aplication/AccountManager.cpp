@@ -46,6 +46,10 @@ bool AccountManager::accountExists(const std::string& number) const {
     return accounts.find(number) != accounts.end();
 }
 
+std::map<std::string, std::shared_ptr<Account>> AccountManager::getAllAccounts() const {
+    return accounts;
+}
+
 void AccountManager::loadAll() {
     const auto& allAccounts = saver.getAll();
     for (const auto& account : allAccounts) {
@@ -57,4 +61,5 @@ void AccountManager::saveAll() {
     for (const auto& pair : accounts) {
         saver.save(*pair.second);
     }
+    saver.saveToFile();
 }

@@ -24,6 +24,12 @@ std::string getName(){return Name;}
 std::string getTaxId(){return TaxId;}
 std::vector<Account> getAccount(){return Accounts;}
 
+void setName(const std::string& newName) {
+    if (!newName.empty()) {
+        Name = newName;
+    }
+}
+
 void AddAccount(Account account){
     Accounts.push_back(account);
 }

@@ -19,6 +19,7 @@ public:
     void deleteAccount(const std::string& number);
     std::shared_ptr<Account> getAccount(const std::string& number);
     bool accountExists(const std::string& number) const;
+    std::map<std::string, std::shared_ptr<Account>> getAllAccounts() const;
     
     void loadAll();
     void saveAll();

@@ -7,15 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 enable_testing()
 
 file(GLOB_RECURSE CORE_SOURCES 
-    "src/*.cpp" 
+    "src/**/*.cpp" 
 )
 
 list(REMOVE_ITEM CORE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 
-add_executable(${PROJECT_NAME} 
-    src/main.cpp 
-    ${CORE_SOURCES}
-)
+add_executable(Bank_sustem src/main.cpp ${CORE_SOURCES})
 
 include(FetchContent)
 FetchContent_Declare(
