@@ -26,7 +26,7 @@ Core
 ├── Transaction
 ├── Observer
 ├── InterestStrategy
-├── NotificationService
+├── TransactionEvent
 └── ICommand
 
 Infrastructure
@@ -37,6 +37,7 @@ Console
 ├──  AccountUI
 ├──  ClientUI
 ├── MainMenu
+├── NotificationService
 └── TransactionUI
 
 Entry Point

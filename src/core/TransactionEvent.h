@@ -8,7 +8,7 @@ struct TransactionEvent {
     TransactionType type;
     double amount;
     double newBalance;
-    std::string details;  // Optional details (e.g., recipient account for transfers)
+    std::string details;  
 
     TransactionEvent(TransactionType t, double amt, double balance, const std::string& det = "")
         : type(t), amount(amt), newBalance(balance), details(det) {}
